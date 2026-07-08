@@ -1,10 +1,12 @@
 # Responsi Praktikum Sistem Terdistribusi dan Terdesentralisasi (FIF25002P)
 
-**Nama** : _(isi nama Anda)_
-**NIM** : _(isi NIM Anda)_
-**Program Studi** : Informatika - S1
-**Dosen** : Dr. Bambang Purnomosidi D. P.
-**Semester** : Genap 2025/2026
+| Dosen |
+| --- |
+| Dr. Bambang Purnomosidi D. P. |
+
+| Nama | NIM | KELAS | Semester |
+| --- | --- | --- | --- | 
+| M Raka Aiko P | 235410023 | Informatika 1| Genap 2025/2026 |
 
 Repo ini berisi jawaban Responsi untuk 3 CPMK, dikerjakan pada **Windows** menggunakan **Docker Desktop**, **YugabyteDB**, dan **Python (Flask)**.
 
@@ -88,6 +90,8 @@ venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ```
+<img width="1234" height="76" alt="image" src="https://github.com/user-attachments/assets/497eb085-ed5a-4d95-8de4-80168b3a4d8c" />
+<img width="1472" height="774" alt="image" src="https://github.com/user-attachments/assets/9bf75fa5-4262-4556-b810-b5fefa119b63" />
 
 API akan berjalan di `http://localhost:5000`.
 
@@ -105,34 +109,16 @@ API akan berjalan di `http://localhost:5000`.
 http://localhost:5000/api/pegawai
 http://localhost:5000/api/produk
 ```
+<img width="625" height="575" alt="image" src="https://github.com/user-attachments/assets/9c1250c1-aa2a-4dfd-b99c-03760b6c5fe1" />
+<img width="571" height="589" alt="image" src="https://github.com/user-attachments/assets/8cb5d44c-c822-4800-85be-e9b4e3b460e0" />
 
 ### Contoh akses via curl (PowerShell)
 ```powershell
 curl http://localhost:5000/api/pegawai
 curl http://localhost:5000/api/produk/1
 ```
-
-### Contoh output JSON
-```json
-{
-  "status": "success",
-  "count": 5,
-  "data": [
-    {
-      "id": 1,
-      "nama": "Andi Saputra",
-      "jabatan": "Backend Engineer",
-      "departemen": "IT",
-      "gaji": 9500000.00
-    }
-  ]
-}
-```
-
-> 📸 **Tempelkan screenshot Anda di sini setelah dijalankan:**
-> - `screenshots/05-api-running.png` — terminal menampilkan Flask berjalan di port 5000
-> - `screenshots/06-browser-pegawai.png` — hasil akses `/api/pegawai` di browser
-> - `screenshots/07-curl-produk.png` — hasil `curl` untuk `/api/produk`
+<img width="1166" height="718" alt="image" src="https://github.com/user-attachments/assets/c393dbda-3820-49ee-95ce-2a47b620ed49" />
+<img width="1131" height="542" alt="image" src="https://github.com/user-attachments/assets/0dd89b27-7e0f-4f18-a7e6-9ab81453154c" />
 
 ---
 
@@ -188,17 +174,3 @@ flowchart TD
 Solana menggunakan **Proof-of-History (PoH)** dikombinasikan dengan Proof-of-Stake (Tower BFT) untuk mempercepat kesepakatan waktu antar node, sedangkan Ethereum **tidak** menggunakan PoH — Ethereum mengandalkan slot/epoch berbasis wall-clock time dan mekanisme finality dua lapis (LMD-GHOST untuk fork-choice cepat + Casper-FFG untuk finality yang kuat/irreversible).
 
 ---
-
-## Struktur Repository
-
-```
-responsi-disdec-sys/
-├── README.md              # Dokumen jawaban ini
-├── docker-compose.yml      # Menjalankan YugabyteDB (CPMK 1)
-├── sql/
-│   └── init.sql            # Script pembuatan 2 tabel + 5 data masing-masing
-├── api/
-│   ├── app.py               # REST API Python/Flask (CPMK 2)
-│   └── requirements.txt
-└── screenshots/             # Bukti hasil eksekusi (CPMK 1 & 2)
-```
