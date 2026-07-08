@@ -74,6 +74,22 @@ SELECT * FROM produk;
 ```
 <img width="576" height="493" alt="image" src="https://github.com/user-attachments/assets/4550e003-4e12-48a1-978f-891b9453e44b" />
 
+#### Penjelasan:
+1. Menyiapkan environment Docker di Windows (Docker Desktop) untuk menjalankan database terdistribusi.
+2. Menulis docker-compose.yml yang mendefinisikan satu service container bernama yugabytedb-node1, menggunakan image resmi yugabyte/yugabyte, dengan port-port penting dipetakan ke localhost (7000 untuk Master UI, 9000 untuk TServer UI, 5433 untuk YSQL/koneksi SQL).
+3. Menjalankan container dengan docker-compose up -d, sehingga YugabyteDB aktif dan bisa menerima koneksi SQL di localhost:5433.
+4. Merancang skema data sendiri (bebas sesuai ketentuan soal): dua tabel —
+- pegawai (id, nama, jabatan, departemen, gaji)
+- produk (id, nama_produk, kategori, harga, stok)
+5. Menulis skrip SQL (init.sql) berisi:
+- CREATE DATABASE responsi_db
+- CREATE TABLE untuk kedua tabel di atas
+- INSERT 5 baris data ke masing-masing tabel
+6. Mengeksekusi skrip itu ke dalam container lewat ysqlsh (client SQL YugabyteDB), sehingga database, tabel, dan data benar-benar tercipta di dalam server YugabyteDB yang berjalan di Docker.
+7. Membuktikan hasil kerja dengan menjalankan perintah verifikasi (\dt untuk daftar tabel, SELECT * FROM pegawai; dan SELECT * FROM produk; untuk isi data), lalu didokumentasikan lewat screenshot sebagai bukti bahwa kedua tabel dan datanya benar-benar tersimpan di database terdistribusi tersebut.
+#### Hasil akhir nomor 1:
+Hasil akhir nomor 1: sebuah instance YugabyteDB yang berjalan di container Docker, berisi database responsi_db dengan 2 tabel yang masing-masing terisi 5 baris data, dan sudah diverifikasi secara langsung lewat query SQL.
+
 ---
 
 ## CPMK 2 - REST API dengan Python (40%)
@@ -119,6 +135,20 @@ curl http://localhost:5000/api/produk/1
 ```
 <img width="1166" height="718" alt="image" src="https://github.com/user-attachments/assets/c393dbda-3820-49ee-95ce-2a47b620ed49" />
 <img width="1131" height="542" alt="image" src="https://github.com/user-attachments/assets/0dd89b27-7e0f-4f18-a7e6-9ab81453154c" />
+
+#### Penjelasan:
+1. Membuat proyek Python terpisah (folder api/) dengan virtual environment (venv) agar dependency-nya terisolasi dari sistem.
+2. Menentukan library yang dipakai: Flask untuk membangun web server/REST API, dan pg8000 sebagai driver koneksi ke YugabyteDB (dipilih karena kompatibel dengan protokol PostgreSQL dan tidak butuh proses compile native di Windows).
+3. Menulis kode app.py yang berisi:
+- Konfigurasi koneksi ke database YugabyteDB yang sudah dibuat di nomor 1 (host=localhost, port=5433, database=responsi_db).
+- Fungsi query_all() sebagai helper untuk mengeksekusi query SQL dan mengubah hasilnya menjadi format Python (list of dict).
+- 5 endpoint REST API: /, /api/pegawai, /api/pegawai/<id>, /api/produk, /api/produk/<id>.
+4. Menjalankan server API dengan python app.py, sehingga Flask aktif dan mendengarkan request di http://localhost:5000.
+5. Menguji setiap endpoint lewat browser dan/atau curl, memastikan data dari tabel pegawai dan produk yang dibuat di nomor 1 benar-benar bisa diambil dan tampil dalam format JSON yang valid.
+6. Mendokumentasikan hasil pengujian (screenshot response JSON di browser/terminal) sebagai bukti bahwa REST API berhasil mengekspos data database ke luar.
+
+#### Hasil akhir nomor 2:
+sebuah REST API berbasis Python/Flask yang berjalan di localhost:5000, mampu mengambil data secara langsung dari database YugabyteDB (hasil nomor 1) dan menyajikannya sebagai response JSON yang bisa diakses lewat browser atau tool seperti curl.
 
 ---
 
