@@ -1,0 +1,26 @@
+version: "3.8"
+
+# Menjalankan YugabyteDB single-node untuk keperluan Responsi CPMK 1.
+# Cara pakai (Windows PowerShell, pastikan Docker Desktop sudah berjalan):
+#   docker-compose up -d
+#   docker exec -it yugabytedb-node1 ysqlsh -h yugabytedb-node1
+
+services:
+  yugabytedb-node1:
+    image: yugabytedb/yugabyte:latest
+    container_name: yugabytedb-node1
+    command: >
+      bin/yugabyted start
+      --background=false
+      --daemon=false
+    ports:
+      - "7000:7000"   # Master UI (YugabyteDB UI)
+      - "9000:9000"   # TServer UI
+      - "5433:5433"   # YSQL (PostgreSQL-compatible) port
+      - "9042:9042"   # YCQL port
+    volumes:
+      - yb_data:/root/var
+    restart: unless-stopped
+
+volumes:
+  yb_data:
