@@ -18,8 +18,7 @@ Endpoint:
 """
 
 from flask import Flask, jsonify
-import psycopg2
-import psycopg2.extras
+import pg8000.native
 
 app = Flask(__name__)
 
@@ -29,23 +28,22 @@ app = Flask(__name__)
 DB_CONFIG = {
     "host": "localhost",
     "port": 5433,
-    "dbname": "responsi_db",
+    "database": "responsi_db",
     "user": "yugabyte",
     "password": "yugabyte",
 }
 
 
 def get_connection():
-    return psycopg2.connect(**DB_CONFIG)
+    return pg8000.native.Connection(**DB_CONFIG)
 
 
 def query_all(sql, params=None):
     conn = get_connection()
     try:
-        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            cur.execute(sql, params or ())
-            rows = cur.fetchall()
-            return [dict(r) for r in rows]
+        rows = conn.run(sql, **(params or {}))
+        columns = [c["name"] for c in conn.columns]
+        return [dict(zip(columns, row)) for row in rows]
     finally:
         conn.close()
 
@@ -72,8 +70,8 @@ def get_pegawai():
 @app.route("/api/pegawai/<int:pegawai_id>", methods=["GET"])
 def get_pegawai_by_id(pegawai_id):
     data = query_all(
-        "SELECT id, nama, jabatan, departemen, gaji FROM pegawai WHERE id = %s;",
-        (pegawai_id,)
+        "SELECT id, nama, jabatan, departemen, gaji FROM pegawai WHERE id = :pid;",
+        {"pid": pegawai_id}
     )
     if not data:
         return jsonify({"status": "error", "message": "Pegawai tidak ditemukan"}), 404
@@ -89,8 +87,8 @@ def get_produk():
 @app.route("/api/produk/<int:produk_id>", methods=["GET"])
 def get_produk_by_id(produk_id):
     data = query_all(
-        "SELECT id, nama_produk, kategori, harga, stok FROM produk WHERE id = %s;",
-        (produk_id,)
+        "SELECT id, nama_produk, kategori, harga, stok FROM produk WHERE id = :pid;",
+        {"pid": produk_id}
     )
     if not data:
         return jsonify({"status": "error", "message": "Produk tidak ditemukan"}), 404
