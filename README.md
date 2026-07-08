@@ -26,6 +26,7 @@ Pastikan **Docker Desktop** sudah terinstall dan berjalan (WSL2 backend aktif), 
 docker-compose up -d
 docker ps
 ```
+<img width="731" height="359" alt="image" src="https://github.com/user-attachments/assets/935ebe32-ef61-4a78-9e75-ecbb889687b6" />
 
 Tunggu sampai container `yugabytedb-node1` berstatus `healthy`/`Up`. Cek YugabyteDB UI di browser:
 
@@ -33,14 +34,19 @@ Tunggu sampai container `yugabytedb-node1` berstatus `healthy`/`Up`. Cek Yugabyt
 http://localhost:7000   -> Master UI
 http://localhost:9000   -> TServer UI
 ```
+<img width="718" height="829" alt="image" src="https://github.com/user-attachments/assets/1db416fa-d548-42a1-96f6-31810f001c4d" />
+<img width="721" height="828" alt="image" src="https://github.com/user-attachments/assets/49c8d06c-9305-487b-9b08-792f6ad6318b" />
+
 
 ### 2. Masuk ke ysqlsh
 ```powershell
 docker exec -it yugabytedb-node1 ysqlsh -h yugabytedb-node1
 ```
+<img width="729" height="165" alt="image" src="https://github.com/user-attachments/assets/3430a43a-f780-40aa-8208-f10ef8fdfb4c" />
+
 
 ### 3. Membuat 2 tabel dan mengisi 5 data
-Jalankan skrip `sql/init.sql` (bisa copy-paste isinya ke ysqlsh, atau salin file ke dalam container lalu jalankan dengan `\i`):
+<img width="447" height="547" alt="image" src="https://github.com/user-attachments/assets/c2ad71ba-dac6-42ee-be2c-316c038f7761" />
 
 ```powershell
 docker cp sql/init.sql yugabytedb-node1:/home/yugabyte/init.sql
@@ -48,6 +54,7 @@ docker exec -it yugabytedb-node1 ysqlsh -h yugabytedb-node1 -f /home/yugabyte/in
 ```
 
 Skrip ini membuat database `responsi_db` dengan 2 tabel:
+<img width="710" height="773" alt="image" src="https://github.com/user-attachments/assets/fae9ae2e-5120-4077-9c0e-c34b60ea9b71" />
 
 | Tabel     | Kolom                                              | Jumlah Data |
 |-----------|-----------------------------------------------------|-------------|
@@ -63,13 +70,7 @@ Jalankan verifikasi berikut lalu **screenshot hasilnya** dan simpan di folder `s
 SELECT * FROM pegawai;
 SELECT * FROM produk;
 ```
-
-> 📸 **Tempelkan screenshot Anda di sini setelah dijalankan:**
-> - `screenshots/01-docker-ps.png` — bukti container YugabyteDB berjalan
-> - `screenshots/02-list-tables.png` — hasil `\dt` menampilkan 2 tabel
-> - `screenshots/03-select-pegawai.png` — hasil `SELECT * FROM pegawai;` (5 baris)
-> - `screenshots/04-select-produk.png` — hasil `SELECT * FROM produk;` (5 baris)
-> - Alternatif: buka **YugabyteDB UI** (`http://localhost:15433` untuk YSQL/YB Web UI atau melalui `http://localhost:7000/tablet-servers`) dan screenshot daftar tabelnya.
+<img width="576" height="493" alt="image" src="https://github.com/user-attachments/assets/4550e003-4e12-48a1-978f-891b9453e44b" />
 
 ---
 
